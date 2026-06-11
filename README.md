@@ -30,7 +30,7 @@ A simple web app for managing my university timetable and notes.
 |---------|-------|
 | Tafseer | 🟢 Green |
 | Hadith  | 🔵 Blue |
-| Fiqh    | 🩷 Pink |
+| Fiqh    | 🔴 Pink |
 | Seerat  | 🟡 Amber |
 | History | 🟣 Purple |
 
