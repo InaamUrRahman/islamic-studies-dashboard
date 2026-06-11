@@ -1,350 +1,629 @@
 <!DOCTYPE html>
-<html lang="ur" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Student Dashboard — INAMURRAHMAN SIDDIQUI</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard — Inamurrahman Siddiqui</title>
   <style>
+    :root {
+      --bg: #f5f5f0;
+      --surface: #ffffff;
+      --border: #e0e0d8;
+      --text: #1a1a1a;
+      --muted: #666;
+      --accent: #1a1a1a;
+      --radius: 12px;
+      --tafseer: #1D9E75;
+      --hadith:  #378ADD;
+      --fiqh:    #D4537E;
+      --seerat:  #BA7517;
+      --history: #7F77DD;
+    }
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --surface: #252525;
+      --border: #333;
+      --text: #f0f0e8;
+      --muted: #999;
+      --accent: #f0f0e8;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.2s, color 0.2s; }
 
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f5f5f0;
-      color: #1a1a1a;
-      min-height: 100vh;
-    }
+    /* HEADER */
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .header-left h1 { font-size: 17px; font-weight: 700; }
+    .header-left p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .header-right { display: flex; gap: 8px; align-items: center; }
+    .icon-btn { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 16px; color: var(--text); font-family: inherit; transition: background 0.15s; }
+    .icon-btn:hover { background: var(--bg); }
 
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid #e0e0d8;
-      padding: 1rem 1.5rem;
-    }
+    /* LAYOUT */
+    .container { max-width: 750px; margin: 0 auto; padding: 1.5rem 1rem; }
 
-    header h1 { font-size: 18px; font-weight: 600; }
-    header p  { font-size: 13px; color: #666; margin-top: 2px; }
-
-    .container { max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem; }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 1.5rem;
-    }
-
-    .tab {
-      padding: 8px 20px;
-      border-radius: 8px;
-      border: 1px solid #d0d0c8;
-      background: transparent;
-      cursor: pointer;
-      font-size: 14px;
-      color: #666;
-      font-family: inherit;
-      transition: all 0.15s;
-    }
-
-    .tab.active {
-      background: #ffffff;
-      color: #1a1a1a;
-      font-weight: 600;
-      border-color: #999;
-    }
-
+    /* TABS */
+    .tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .tab { padding: 7px 16px; border-radius: 8px; border: 1px solid var(--border); background: transparent; cursor: pointer; font-size: 13px; color: var(--muted); font-family: inherit; transition: all 0.15s; }
+    .tab.active { background: var(--surface); color: var(--text); font-weight: 600; border-color: var(--accent); }
     .section { display: none; }
     .section.active { display: block; }
 
-    .legend {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
+    /* CARDS */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 10px; }
+    .card-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
 
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 12px;
-      color: #555;
-    }
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; text-align: center; }
+    .stat-num { font-size: 28px; font-weight: 700; }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-    .legend-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
-
-    .day-card {
-      background: #ffffff;
-      border: 1px solid #e0e0d8;
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 10px;
-    }
-
-    .day-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 10px;
-    }
-
-    .subject-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 0;
-      border-bottom: 1px solid #f0f0e8;
-    }
-
+    /* TIMETABLE */
+    .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .subject-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
     .subject-row:last-child { border-bottom: none; }
-
-    .subject-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
     .subject-name { font-size: 14px; flex: 1; }
-    .subject-time { font-size: 13px; color: #888; }
+    .subject-time { font-size: 12px; color: var(--muted); }
+    .subject-room { font-size: 11px; padding: 2px 8px; border-radius: 5px; }
 
-    .add-note-form {
-      background: #ffffff;
-      border: 1px solid #e0e0d8;
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.25rem;
+    /* NOTES */
+    .form-row { display: flex; gap: 8px; margin-bottom: 8px; }
+    input, select, textarea { font-family: inherit; font-size: 14px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); width: 100%; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    textarea { min-height: 80px; resize: vertical; margin-bottom: 8px; }
+    .btn { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; transition: all 0.15s; background: var(--accent); color: var(--surface); }
+    .btn:hover { opacity: 0.85; }
+    .btn-outline { background: transparent; color: var(--text); }
+    .btn-outline:hover { background: var(--bg); }
+    .btn-full { width: 100%; }
+    .note-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 10px; }
+    .note-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; }
+    .note-actions { display: flex; gap: 6px; }
+    .small-btn { background: none; border: none; cursor: pointer; font-size: 14px; padding: 2px 5px; border-radius: 5px; color: var(--muted); }
+    .small-btn:hover { background: var(--bg); }
+    .note-title-text { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .note-body-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .note-footer { font-size: 11px; color: var(--muted); margin-top: 8px; display: flex; gap: 12px; }
+    .empty { text-align: center; padding: 2.5rem; color: var(--muted); font-size: 14px; }
+    .search-bar { margin-bottom: 1rem; }
+
+    /* TO-DO */
+    .todo-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .todo-item:last-child { border-bottom: none; }
+    .todo-check { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); flex-shrink: 0; }
+    .todo-text { flex: 1; font-size: 14px; }
+    .todo-text.done { text-decoration: line-through; color: var(--muted); }
+    .todo-due { font-size: 11px; color: var(--muted); }
+    .priority-badge { font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 700; }
+    .p-high { background: #FCEBEB; color: #A32D2D; }
+    .p-med  { background: #FAEEDA; color: #633806; }
+    .p-low  { background: #EAF3DE; color: #27500A; }
+
+    /* GPA */
+    .gpa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .gpa-subject { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .gpa-subject:last-child { border-bottom: none; }
+    .grade-badge { font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 6px; background: var(--bg); }
+    .gpa-total { font-size: 32px; font-weight: 700; text-align: center; padding: 1rem 0; }
+    .progress-bar { height: 6px; border-radius: 3px; background: var(--border); margin-top: 6px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; transition: width 0.4s; }
+
+    /* ATTENDANCE */
+    .att-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 10px; }
+    .att-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; text-align: center; }
+    .att-pct { font-size: 24px; font-weight: 700; }
+    .att-label { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .att-bar { height: 4px; border-radius: 2px; margin-top: 8px; background: var(--border); overflow: hidden; }
+    .att-fill { height: 100%; border-radius: 2px; }
+
+    /* POMODORO */
+    .pomodoro { text-align: center; padding: 1.5rem 0; }
+    .timer-display { font-size: 56px; font-weight: 700; letter-spacing: 2px; margin: 1rem 0; font-variant-numeric: tabular-nums; }
+    .timer-label { font-size: 13px; color: var(--muted); margin-bottom: 1.5rem; }
+    .timer-btns { display: flex; justify-content: center; gap: 10px; margin-bottom: 1.5rem; }
+    .timer-modes { display: flex; justify-content: center; gap: 8px; margin-bottom: 1rem; }
+    .mode-btn { padding: 5px 14px; border-radius: 6px; border: 1px solid var(--border); background: transparent; cursor: pointer; font-size: 12px; font-family: inherit; color: var(--muted); }
+    .mode-btn.active { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+    .session-count { font-size: 13px; color: var(--muted); }
+
+    /* CALCULATOR */
+    .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .calc-display { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 24px; font-weight: 700; text-align: right; margin-bottom: 10px; font-variant-numeric: tabular-nums; min-height: 54px; word-break: break-all; }
+    .calc-btn { padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; font-size: 16px; font-family: inherit; font-weight: 600; color: var(--text); transition: background 0.1s; }
+    .calc-btn:hover { background: var(--bg); }
+    .calc-btn.op { background: var(--bg); color: var(--hadith); }
+    .calc-btn.eq { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+    .calc-btn.clr { color: #E24B4A; }
+    .calc-btn.span2 { grid-column: span 2; }
+
+    /* RESPONSIVE */
+    @media (max-width: 500px) {
+      .tabs { gap: 4px; }
+      .tab { padding: 6px 10px; font-size: 12px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .gpa-grid { grid-template-columns: 1fr; }
     }
-
-    .add-note-form p {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    input, select, textarea {
-      font-family: inherit;
-      font-size: 14px;
-      padding: 8px 12px;
-      border: 1px solid #d0d0c8;
-      border-radius: 8px;
-      background: #fafaf8;
-      color: #1a1a1a;
-      width: 100%;
-    }
-
-    textarea {
-      min-height: 80px;
-      resize: vertical;
-      margin-bottom: 10px;
-    }
-
-    .btn-add {
-      width: 100%;
-      padding: 9px;
-      font-size: 14px;
-      font-weight: 600;
-      background: #1a1a1a;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .btn-add:hover { background: #333; }
-
-    .note-card {
-      background: #ffffff;
-      border: 1px solid #e0e0d8;
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 10px;
-    }
-
-    .note-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .note-badge {
-      font-size: 12px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 6px;
-    }
-
-    .note-date { font-size: 12px; color: #888; }
-    .note-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-    .note-body { font-size: 13px; color: #555; line-height: 1.6; }
-
-    .empty {
-      text-align: center;
-      padding: 2.5rem;
-      color: #888;
-      font-size: 14px;
-      background: #ffffff;
-      border: 1px solid #e0e0d8;
-      border-radius: 12px;
-    }
-
-    .delete-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #ccc;
-      font-size: 16px;
-      padding: 0 4px;
-      font-family: inherit;
-    }
-
-    .delete-btn:hover { color: #e24b4a; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Student Dashboard</h1>
-  <p>INAMURRAHMAN SIDDIQUI — Department of Islamic Studies, University of Lahore</p>
+  <div class="header-left">
+    <h1>📚 Student Dashboard</h1>
+    <p>Inamurrahman Siddiqui — Islamic Studies, UOL</p>
+  </div>
+  <div class="header-right">
+    <span id="clock" style="font-size:13px;color:var(--muted)"></span>
+    <button class="icon-btn" onclick="toggleTheme()" title="Dark/Light Mode">🌙</button>
+  </div>
 </header>
 
 <div class="container">
 
   <div class="tabs">
-    <button class="tab active" onclick="showTab('timetable', this)">📅 Timetable</button>
-    <button class="tab" onclick="showTab('notes', this)">📝 Notes</button>
+    <button class="tab active" onclick="showTab('dashboard',this)">🏠 Home</button>
+    <button class="tab" onclick="showTab('timetable',this)">📅 Timetable</button>
+    <button class="tab" onclick="showTab('notes',this)">📝 Notes</button>
+    <button class="tab" onclick="showTab('todo',this)">✅ Tasks</button>
+    <button class="tab" onclick="showTab('gpa',this)">🎓 GPA</button>
+    <button class="tab" onclick="showTab('attendance',this)">📊 Attendance</button>
+    <button class="tab" onclick="showTab('pomodoro',this)">⏱ Timer</button>
+    <button class="tab" onclick="showTab('calc',this)">🔢 Calc</button>
   </div>
 
-  <!-- TIMETABLE SECTION -->
-  <div id="timetable" class="section active">
-    <div class="legend">
-      <div class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>Tafseer</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#378ADD"></span>Hadith</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#D4537E"></span>Fiqh</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#BA7517"></span>Seerat</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#7F77DD"></span>History</div>
+  <!-- HOME -->
+  <div id="dashboard" class="section active">
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="card">
+      <div class="card-title">📅 Today's Classes</div>
+      <div id="today-classes"></div>
     </div>
+    <div class="card" style="margin-top:10px">
+      <div class="card-title">✅ Pending Tasks</div>
+      <div id="pending-tasks"></div>
+    </div>
+  </div>
 
+  <!-- TIMETABLE -->
+  <div id="timetable" class="section">
+    <div class="legend" id="legend"></div>
     <div id="tt-container"></div>
   </div>
 
-  <!-- NOTES SECTION -->
+  <!-- NOTES -->
   <div id="notes" class="section">
-    <div class="add-note-form">
-      <p>نئی Note لکھیں</p>
+    <div class="card" style="margin-bottom:1rem">
       <div class="form-row">
-        <input type="text" id="note-title-input" placeholder="Note title..." />
-        <select id="note-subject">
-          <option value="Tafseer">Tafseer</option>
-          <option value="Hadith">Hadith</option>
-          <option value="Fiqh">Fiqh</option>
-          <option value="Seerat">Seerat</option>
-          <option value="History">History</option>
+        <input type="text" id="note-title-input" placeholder="Note title..." style="flex:2"/>
+        <select id="note-subject" style="flex:1">
+          <option>Tafseer</option><option>Hadith</option>
+          <option>Fiqh</option><option>Seerat</option><option>History</option>
         </select>
       </div>
-      <textarea id="note-body-input" placeholder="یہاں note لکھیں..."></textarea>
-      <button class="btn-add" onclick="addNote()">+ Note Save کریں</button>
+      <textarea id="note-body-input" placeholder="Write your note here..."></textarea>
+      <button class="btn btn-full" onclick="addNote()">+ Save Note</button>
     </div>
+    <input type="text" class="search-bar" id="note-search" placeholder="🔍 Search notes..." oninput="renderNotes()"/>
     <div id="notes-container"></div>
+  </div>
+
+  <!-- TASKS -->
+  <div id="todo" class="section">
+    <div class="card" style="margin-bottom:1rem">
+      <div class="form-row">
+        <input type="text" id="todo-input" placeholder="New task..." style="flex:2"/>
+        <select id="todo-priority" style="flex:1">
+          <option value="high">🔴 High</option>
+          <option value="med" selected>🟡 Medium</option>
+          <option value="low">🟢 Low</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <select id="todo-subject" style="flex:1">
+          <option value="">-- Subject --</option>
+          <option>Tafseer</option><option>Hadith</option>
+          <option>Fiqh</option><option>Seerat</option><option>History</option>
+        </select>
+        <input type="date" id="todo-due" style="flex:1"/>
+        <button class="btn" onclick="addTodo()">+ Add</button>
+      </div>
+    </div>
+    <div class="card">
+      <div id="todo-container"></div>
+    </div>
+  </div>
+
+  <!-- GPA -->
+  <div id="gpa" class="section">
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-title">Enter Your Marks (out of 100)</div>
+      <div id="gpa-inputs"></div>
+      <button class="btn btn-full" style="margin-top:10px" onclick="calcGPA()">Calculate GPA</button>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Results</div>
+      <div id="gpa-results"></div>
+    </div>
+  </div>
+
+  <!-- ATTENDANCE -->
+  <div id="attendance" class="section">
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">Mark Attendance</div>
+      <div class="form-row">
+        <select id="att-subject" style="flex:1">
+          <option>Tafseer</option><option>Hadith</option>
+          <option>Fiqh</option><option>Seerat</option><option>History</option>
+        </select>
+        <button class="btn" onclick="markAtt('present')" style="background:#1D9E75;border-color:#1D9E75">✅ Present</button>
+        <button class="btn btn-outline" onclick="markAtt('absent')" style="color:#E24B4A;border-color:#E24B4A">❌ Absent</button>
+      </div>
+    </div>
+    <div class="att-grid" id="att-grid"></div>
+  </div>
+
+  <!-- POMODORO -->
+  <div id="pomodoro" class="section">
+    <div class="card">
+      <div class="pomodoro">
+        <div class="timer-modes">
+          <button class="mode-btn active" onclick="setMode(25,'Focus',this)">Focus 25m</button>
+          <button class="mode-btn" onclick="setMode(5,'Short Break',this)">Break 5m</button>
+          <button class="mode-btn" onclick="setMode(15,'Long Break',this)">Long Break 15m</button>
+        </div>
+        <div class="timer-label" id="timer-label">Focus Session</div>
+        <div class="timer-display" id="timer-display">25:00</div>
+        <div class="timer-btns">
+          <button class="btn btn-outline" onclick="startTimer()">▶ Start</button>
+          <button class="btn btn-outline" onclick="pauseTimer()">⏸ Pause</button>
+          <button class="btn btn-outline" onclick="resetTimer()">↺ Reset</button>
+        </div>
+        <div class="session-count" id="session-count">Sessions today: 0</div>
+        <div style="margin-top:1rem">
+          <select id="pomodoro-subject" style="max-width:200px;margin:0 auto;display:block">
+            <option value="">-- Studying: Select subject --</option>
+            <option>Tafseer</option><option>Hadith</option>
+            <option>Fiqh</option><option>Seerat</option><option>History</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALCULATOR -->
+  <div id="calc" class="section">
+    <div class="card" style="max-width:320px;margin:0 auto">
+      <div class="calc-display" id="calc-display">0</div>
+      <div class="calc-grid">
+        <button class="calc-btn clr span2" onclick="calcClear()">AC</button>
+        <button class="calc-btn op" onclick="calcInput('%')">%</button>
+        <button class="calc-btn op" onclick="calcInput('/')">÷</button>
+        <button class="calc-btn" onclick="calcInput('7')">7</button>
+        <button class="calc-btn" onclick="calcInput('8')">8</button>
+        <button class="calc-btn" onclick="calcInput('9')">9</button>
+        <button class="calc-btn op" onclick="calcInput('*')">×</button>
+        <button class="calc-btn" onclick="calcInput('4')">4</button>
+        <button class="calc-btn" onclick="calcInput('5')">5</button>
+        <button class="calc-btn" onclick="calcInput('6')">6</button>
+        <button class="calc-btn op" onclick="calcInput('-')">−</button>
+        <button class="calc-btn" onclick="calcInput('1')">1</button>
+        <button class="calc-btn" onclick="calcInput('2')">2</button>
+        <button class="calc-btn" onclick="calcInput('3')">3</button>
+        <button class="calc-btn op" onclick="calcInput('+')">+</button>
+        <button class="calc-btn span2" onclick="calcInput('0')">0</button>
+        <button class="calc-btn" onclick="calcInput('.')">.</button>
+        <button class="calc-btn eq" onclick="calcEqual()">=</button>
+      </div>
+    </div>
   </div>
 
 </div>
 
 <script>
-  const subjectColors = {
-    Tafseer: { dot:'#1D9E75', bg:'#E1F5EE', text:'#085041' },
-    Hadith:  { dot:'#378ADD', bg:'#E6F1FB', text:'#0C447C' },
-    Fiqh:    { dot:'#D4537E', bg:'#FBEAF0', text:'#72243E' },
-    Seerat:  { dot:'#BA7517', bg:'#FAEEDA', text:'#633806' },
-    History: { dot:'#7F77DD', bg:'#EEEDFE', text:'#3C3489' }
-  };
+const SC = {
+  Tafseer:{ dot:'#1D9E75', bg:'#E1F5EE', text:'#085041' },
+  Hadith: { dot:'#378ADD', bg:'#E6F1FB', text:'#0C447C' },
+  Fiqh:   { dot:'#D4537E', bg:'#FBEAF0', text:'#72243E' },
+  Seerat: { dot:'#BA7517', bg:'#FAEEDA', text:'#633806' },
+  History:{ dot:'#7F77DD', bg:'#EEEDFE', text:'#3C3489' }
+};
 
-  const timetable = [
-    { day:'پیر — Monday',      subjects:[{name:'Tafseer',time:'8:00 – 9:30'},{name:'Hadith',time:'10:00 – 11:30'}] },
-    { day:'منگل — Tuesday',    subjects:[{name:'Fiqh',time:'8:00 – 9:30'},{name:'Seerat',time:'10:00 – 11:30'}] },
-    { day:'بدھ — Wednesday',   subjects:[{name:'History',time:'8:00 – 9:30'},{name:'Tafseer',time:'10:00 – 11:30'}] },
-    { day:'جمعرات — Thursday', subjects:[{name:'Hadith',time:'8:00 – 9:30'},{name:'Fiqh',time:'10:00 – 11:30'}] },
-    { day:'جمعہ — Friday',     subjects:[{name:'Seerat',time:'8:00 – 9:30'},{name:'History',time:'10:00 – 11:30'}] }
-  ];
+const TT = [
+  { day:'Monday',    ur:'پیر',    subjects:[{name:'Tafseer',time:'8:00–9:30',room:'R-101'},{name:'Hadith',time:'10:00–11:30',room:'R-102'}] },
+  { day:'Tuesday',   ur:'منگل',   subjects:[{name:'Fiqh',time:'8:00–9:30',room:'R-103'},{name:'Seerat',time:'10:00–11:30',room:'R-104'}] },
+  { day:'Wednesday', ur:'بدھ',    subjects:[{name:'History',time:'8:00–9:30',room:'R-105'},{name:'Tafseer',time:'10:00–11:30',room:'R-101'}] },
+  { day:'Thursday',  ur:'جمعرات', subjects:[{name:'Hadith',time:'8:00–9:30',room:'R-102'},{name:'Fiqh',time:'10:00–11:30',room:'R-103'}] },
+  { day:'Friday',    ur:'جمعہ',   subjects:[{name:'Seerat',time:'8:00–9:30',room:'R-104'},{name:'History',time:'10:00–11:30',room:'R-105'}] }
+];
 
-  function renderTimetable() {
-    document.getElementById('tt-container').innerHTML = timetable.map(d => `
-      <div class="day-card">
-        <div class="day-title">${d.day}</div>
-        ${d.subjects.map(s => `
-          <div class="subject-row">
-            <span class="subject-dot" style="background:${subjectColors[s.name].dot}"></span>
-            <span class="subject-name">${s.name}</span>
-            <span class="subject-time">${s.time}</span>
-          </div>`).join('')}
-      </div>`).join('');
-  }
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
-  let notes = JSON.parse(localStorage.getItem('student-notes') || '[]');
+function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function load(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }
 
-  function renderNotes() {
-    const c = document.getElementById('notes-container');
-    if (!notes.length) {
-      c.innerHTML = '<div class="empty">ابھی کوئی note نہیں — اوپر سے لکھیں!</div>';
-      return;
-    }
-    c.innerHTML = [...notes].reverse().map((n, ri) => {
-      const i = notes.length - 1 - ri;
-      const col = subjectColors[n.subject];
-      return `<div class="note-card">
-        <div class="note-header">
-          <span class="note-badge" style="background:${col.bg};color:${col.text}">${n.subject}</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="note-date">${n.date}</span>
-            <button class="delete-btn" onclick="deleteNote(${i})" title="Delete">✕</button>
-          </div>
-        </div>
-        <div class="note-title">${n.title}</div>
-        <div class="note-body">${n.body}</div>
-      </div>`;
-    }).join('');
-  }
+let notes = load('s-notes',[]);
+let todos = load('s-todos',[]);
+let att   = load('s-att',{Tafseer:{p:0,a:0},Hadith:{p:0,a:0},Fiqh:{p:0,a:0},Seerat:{p:0,a:0},History:{p:0,a:0}});
+let gpaData = load('s-gpa',{});
+let pomSessions = load('s-pom',0);
 
-  function addNote() {
-    const title = document.getElementById('note-title-input').value.trim();
-    const body  = document.getElementById('note-body-input').value.trim();
-    const subject = document.getElementById('note-subject').value;
-    if (!title || !body) { alert('Title اور Note دونوں لکھیں!'); return; }
-    notes.push({ title, body, subject, date: new Date().toLocaleDateString('en-PK') });
-    localStorage.setItem('student-notes', JSON.stringify(notes));
-    document.getElementById('note-title-input').value = '';
-    document.getElementById('note-body-input').value = '';
-    renderNotes();
-  }
+// CLOCK
+function updateClock(){
+  const n=new Date();
+  document.getElementById('clock').textContent =
+    n.toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit'});
+}
+setInterval(updateClock,1000); updateClock();
 
-  function deleteNote(i) {
-    if (!confirm('یہ note delete کریں؟')) return;
-    notes.splice(i, 1);
-    localStorage.setItem('student-notes', JSON.stringify(notes));
-    renderNotes();
-  }
+// THEME
+function toggleTheme(){
+  const d=document.body;
+  const isDark=d.getAttribute('data-theme')==='dark';
+  d.setAttribute('data-theme', isDark?'':'dark');
+  save('s-theme', isDark?'light':'dark');
+}
+if(load('s-theme','light')==='dark') document.body.setAttribute('data-theme','dark');
 
-  function showTab(tab, btn) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById(tab).classList.add('active');
-    btn.classList.add('active');
-  }
+// TAB
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='dashboard') renderDashboard();
+}
 
-  renderTimetable();
+// DASHBOARD
+function renderDashboard(){
+  const totalNotes=notes.length;
+  const pendingTodos=todos.filter(t=>!t.done).length;
+  const todayDay=DAYS[new Date().getDay()];
+  const todayClasses=(TT.find(d=>d.day===todayDay)||{subjects:[]}).subjects.length;
+  const totalPom=pomSessions;
+  document.getElementById('stats-grid').innerHTML=`
+    <div class="stat-card"><div class="stat-num">${totalNotes}</div><div class="stat-label">Total Notes</div></div>
+    <div class="stat-card"><div class="stat-num">${pendingTodos}</div><div class="stat-label">Pending Tasks</div></div>
+    <div class="stat-card"><div class="stat-num">${todayClasses}</div><div class="stat-label">Classes Today</div></div>
+    <div class="stat-card"><div class="stat-num">${totalPom}</div><div class="stat-label">Focus Sessions</div></div>
+  `;
+  const todayTT=TT.find(d=>d.day===todayDay);
+  document.getElementById('today-classes').innerHTML = todayTT
+    ? todayTT.subjects.map(s=>`
+        <div class="subject-row">
+          <span class="dot" style="background:${SC[s.name].dot}"></span>
+          <span class="subject-name">${s.name}</span>
+          <span class="subject-time">${s.time}</span>
+          <span class="subject-room" style="background:${SC[s.name].bg};color:${SC[s.name].text}">${s.room}</span>
+        </div>`).join('')
+    : '<div class="empty">No classes today 🎉</div>';
+  const pending=todos.filter(t=>!t.done).slice(0,4);
+  document.getElementById('pending-tasks').innerHTML = pending.length
+    ? pending.map(t=>`
+        <div class="todo-item">
+          <span class="priority-badge p-${t.priority}">${t.priority.toUpperCase()}</span>
+          <span class="todo-text">${t.text}</span>
+          ${t.subject?`<span class="badge" style="background:${SC[t.subject]?.bg||'#eee'};color:${SC[t.subject]?.text||'#333'}">${t.subject}</span>`:''}
+        </div>`).join('')
+    : '<div class="empty">No pending tasks! 🎉</div>';
+}
+
+// TIMETABLE
+function renderTimetable(){
+  document.getElementById('legend').innerHTML=Object.entries(SC).map(([k,v])=>
+    `<div class="legend-item"><span class="dot" style="background:${v.dot}"></span>${k}</div>`).join('');
+  const todayDay=DAYS[new Date().getDay()];
+  document.getElementById('tt-container').innerHTML=TT.map(d=>`
+    <div class="card" style="${d.day===todayDay?'border-color:#378ADD;border-width:2px':''}">
+      <div class="card-title">${d.ur} — ${d.day} ${d.day===todayDay?'<span style="color:#378ADD">● Today</span>':''}</div>
+      ${d.subjects.map(s=>`
+        <div class="subject-row">
+          <span class="dot" style="background:${SC[s.name].dot}"></span>
+          <span class="subject-name">${s.name}</span>
+          <span class="subject-time">${s.time}</span>
+          <span class="subject-room" style="background:${SC[s.name].bg};color:${SC[s.name].text}">${s.room}</span>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+// NOTES
+function addNote(){
+  const title=document.getElementById('note-title-input').value.trim();
+  const body=document.getElementById('note-body-input').value.trim();
+  const subject=document.getElementById('note-subject').value;
+  if(!title||!body){ alert('Please fill title and note!'); return; }
+  notes.unshift({id:Date.now(),title,body,subject,date:new Date().toLocaleDateString('en-PK'),time:new Date().toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit'})});
+  save('s-notes',notes);
+  document.getElementById('note-title-input').value='';
+  document.getElementById('note-body-input').value='';
   renderNotes();
-</script>
+}
+function deleteNote(id){
+  if(!confirm('Delete this note?')) return;
+  notes=notes.filter(n=>n.id!==id);
+  save('s-notes',notes);
+  renderNotes();
+}
+function renderNotes(){
+  const q=(document.getElementById('note-search')?.value||'').toLowerCase();
+  const filtered=notes.filter(n=>n.title.toLowerCase().includes(q)||n.body.toLowerCase().includes(q));
+  const c=document.getElementById('notes-container');
+  if(!filtered.length){ c.innerHTML='<div class="empty">No notes found.</div>'; return; }
+  c.innerHTML=filtered.map(n=>`
+    <div class="note-card">
+      <div class="note-header">
+        <span class="badge" style="background:${SC[n.subject].bg};color:${SC[n.subject].text}">${n.subject}</span>
+        <div class="note-actions">
+          <span style="font-size:11px;color:var(--muted)">${n.date} ${n.time}</span>
+          <button class="small-btn" onclick="deleteNote(${n.id})">🗑</button>
+        </div>
+      </div>
+      <div class="note-title-text">${n.title}</div>
+      <div class="note-body-text">${n.body}</div>
+    </div>`).join('');
+}
 
+// TODOS
+function addTodo(){
+  const text=document.getElementById('todo-input').value.trim();
+  if(!text){ alert('Write a task!'); return; }
+  todos.unshift({id:Date.now(),text,priority:document.getElementById('todo-priority').value,subject:document.getElementById('todo-subject').value,due:document.getElementById('todo-due').value,done:false});
+  save('s-todos',todos);
+  document.getElementById('todo-input').value='';
+  renderTodos();
+}
+function toggleTodo(id){
+  const t=todos.find(t=>t.id===id);
+  if(t) t.done=!t.done;
+  save('s-todos',todos);
+  renderTodos();
+}
+function deleteTodo(id){
+  todos=todos.filter(t=>t.id!==id);
+  save('s-todos',todos);
+  renderTodos();
+}
+function renderTodos(){
+  const c=document.getElementById('todo-container');
+  if(!todos.length){ c.innerHTML='<div class="empty">No tasks yet!</div>'; return; }
+  c.innerHTML=todos.map(t=>`
+    <div class="todo-item">
+      <input type="checkbox" class="todo-check" ${t.done?'checked':''} onchange="toggleTodo(${t.id})"/>
+      <span class="todo-text ${t.done?'done':''}">${t.text}</span>
+      ${t.subject&&SC[t.subject]?`<span class="badge" style="background:${SC[t.subject].bg};color:${SC[t.subject].text}">${t.subject}</span>`:''}
+      <span class="priority-badge p-${t.priority}">${t.priority.toUpperCase()}</span>
+      ${t.due?`<span class="todo-due">📅 ${t.due}</span>`:''}
+      <button class="small-btn" onclick="deleteTodo(${t.id})">🗑</button>
+    </div>`).join('');
+}
+
+// GPA
+const subjects=['Tafseer','Hadith','Fiqh','Seerat','History'];
+function renderGPAInputs(){
+  document.getElementById('gpa-inputs').innerHTML=subjects.map(s=>`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span style="flex:1;font-size:14px">${s}</span>
+      <input type="number" min="0" max="100" value="${gpaData[s]||''}" placeholder="Marks" style="width:100px" id="gpa-${s}" oninput="saveGPAInput('${s}',this.value)"/>
+    </div>`).join('');
+}
+function saveGPAInput(s,v){ gpaData[s]=parseFloat(v)||0; save('s-gpa',gpaData); }
+function calcGPA(){
+  let total=0; let count=0;
+  const rows=subjects.map(s=>{
+    const m=parseFloat(document.getElementById('gpa-'+s).value)||0;
+    gpaData[s]=m;
+    let grade,gp,color;
+    if(m>=85){grade='A+';gp=4.0;color='#1D9E75';}
+    else if(m>=80){grade='A';gp=4.0;color='#1D9E75';}
+    else if(m>=75){grade='B+';gp=3.5;color='#378ADD';}
+    else if(m>=70){grade='B';gp=3.0;color='#378ADD';}
+    else if(m>=65){grade='C+';gp=2.5;color='#BA7517';}
+    else if(m>=60){grade='C';gp=2.0;color='#BA7517';}
+    else if(m>=50){grade='D';gp=1.0;color='#D4537E';}
+    else{grade='F';gp=0;color='#E24B4A';}
+    total+=gp; count++;
+    return {s,m,grade,gp,color};
+  });
+  save('s-gpa',gpaData);
+  const cgpa=(total/count).toFixed(2);
+  document.getElementById('gpa-results').innerHTML=`
+    <div class="gpa-total">${cgpa} <span style="font-size:16px;color:var(--muted)">/ 4.0 GPA</span></div>
+    ${rows.map(r=>`
+      <div class="gpa-subject">
+        <span style="font-size:14px">${r.s}</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:13px;color:var(--muted)">${r.m}/100</span>
+          <span class="grade-badge" style="color:${r.color}">${r.grade}</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${r.m}%;background:${r.color}"></div></div>
+    `).join('')}
+  `;
+}
+
+// ATTENDANCE
+function markAtt(status){
+  const s=document.getElementById('att-subject').value;
+  if(status==='present') att[s].p++; else att[s].a++;
+  save('s-att',att);
+  renderAtt();
+}
+function renderAtt(){
+  document.getElementById('att-grid').innerHTML=Object.entries(att).map(([s,v])=>{
+    const total=v.p+v.a;
+    const pct=total?Math.round(v.p/total*100):0;
+    const color=pct>=75?'#1D9E75':pct>=60?'#BA7517':'#E24B4A';
+    return `<div class="att-card">
+      <div class="att-pct" style="color:${color}">${pct}%</div>
+      <div class="att-label">${s}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:3px">${v.p}P / ${v.a}A</div>
+      <div class="att-bar"><div class="att-fill" style="width:${pct}%;background:${color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// POMODORO
+let pomMinutes=25, pomSeconds=0, pomRunning=false, pomInterval=null, pomLabel='Focus Session';
+function setMode(min,label,btn){
+  clearInterval(pomInterval); pomRunning=false;
+  pomMinutes=min; pomSeconds=0; pomLabel=label;
+  document.getElementById('timer-label').textContent=label;
+  document.getElementById('timer-display').textContent=`${String(min).padStart(2,'0')}:00`;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function startTimer(){
+  if(pomRunning) return;
+  pomRunning=true;
+  pomInterval=setInterval(()=>{
+    if(pomSeconds===0){
+      if(pomMinutes===0){
+        clearInterval(pomInterval); pomRunning=false;
+        if(pomLabel==='Focus Session'){ pomSessions++; save('s-pom',pomSessions); document.getElementById('session-count').textContent=`Sessions today: ${pomSessions}`; }
+        alert(`${pomLabel} complete! 🎉`);
+        return;
+      }
+      pomMinutes--; pomSeconds=59;
+    } else { pomSeconds--; }
+    document.getElementById('timer-display').textContent=`${String(pomMinutes).padStart(2,'0')}:${String(pomSeconds).padStart(2,'0')}`;
+  },1000);
+}
+function pauseTimer(){ clearInterval(pomInterval); pomRunning=false; }
+function resetTimer(){
+  clearInterval(pomInterval); pomRunning=false;
+  const modes={25:'Focus Session',5:'Short Break',15:'Long Break'};
+  const orig=Object.entries(modes).find(([m,l])=>l===pomLabel)?.[0]||25;
+  pomMinutes=parseInt(orig); pomSeconds=0;
+  document.getElementById('timer-display').textContent=`${String(pomMinutes).padStart(2,'0')}:00`;
+}
+
+// CALCULATOR
+let calcExpr='';
+function calcInput(v){
+  if(calcExpr==='Error') calcExpr='';
+  calcExpr+=v;
+  document.getElementById('calc-display').textContent=calcExpr;
+}
+function calcClear(){ calcExpr=''; document.getElementById('calc-display').textContent='0'; }
+function calcEqual(){
+  try{
+    let result=Function('"use strict";return ('+calcExpr+')')();
+    result=parseFloat(result.toFixed(10));
+    calcExpr=String(result);
+    document.getElementById('calc-display').textContent=calcExpr;
+  }catch(e){ calcExpr='Error'; document.getElementById('calc-display').textContent='Error'; }
+}
+
+// INIT
+renderTimetable();
+renderNotes();
+renderTodos();
+renderGPAInputs();
+renderAtt();
+renderDashboard();
+document.getElementById('session-count').textContent=`Sessions today: ${pomSessions}`;
+</script>
 </body>
 </html>
