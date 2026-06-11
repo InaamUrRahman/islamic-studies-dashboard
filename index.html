@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard — INAMURRAHMAN SIDDIQUI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f5f0;
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0d8;
+      padding: 1rem 1.5rem;
+    }
+
+    header h1 { font-size: 18px; font-weight: 600; }
+    header p  { font-size: 13px; color: #666; margin-top: 2px; }
+
+    .container { max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem; }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab {
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: 1px solid #d0d0c8;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      color: #666;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .tab.active {
+      background: #ffffff;
+      color: #1a1a1a;
+      font-weight: 600;
+      border-color: #999;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .day-card {
+      background: #ffffff;
+      border: 1px solid #e0e0d8;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .day-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+
+    .subject-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0e8;
+    }
+
+    .subject-row:last-child { border-bottom: none; }
+
+    .subject-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .subject-name { font-size: 14px; flex: 1; }
+    .subject-time { font-size: 13px; color: #888; }
+
+    .add-note-form {
+      background: #ffffff;
+      border: 1px solid #e0e0d8;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .add-note-form p {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    input, select, textarea {
+      font-family: inherit;
+      font-size: 14px;
+      padding: 8px 12px;
+      border: 1px solid #d0d0c8;
+      border-radius: 8px;
+      background: #fafaf8;
+      color: #1a1a1a;
+      width: 100%;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+
+    .btn-add {
+      width: 100%;
+      padding: 9px;
+      font-size: 14px;
+      font-weight: 600;
+      background: #1a1a1a;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-add:hover { background: #333; }
+
+    .note-card {
+      background: #ffffff;
+      border: 1px solid #e0e0d8;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .note-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .note-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+
+    .note-date { font-size: 12px; color: #888; }
+    .note-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .note-body { font-size: 13px; color: #555; line-height: 1.6; }
+
+    .empty {
+      text-align: center;
+      padding: 2.5rem;
+      color: #888;
+      font-size: 14px;
+      background: #ffffff;
+      border: 1px solid #e0e0d8;
+      border-radius: 12px;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #ccc;
+      font-size: 16px;
+      padding: 0 4px;
+      font-family: inherit;
+    }
+
+    .delete-btn:hover { color: #e24b4a; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Student Dashboard</h1>
+  <p>INAMURRAHMAN SIDDIQUI — Department of Islamic Studies, University of Lahore</p>
+</header>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('timetable', this)">📅 Timetable</button>
+    <button class="tab" onclick="showTab('notes', this)">📝 Notes</button>
+  </div>
+
+  <!-- TIMETABLE SECTION -->
+  <div id="timetable" class="section active">
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>Tafseer</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#378ADD"></span>Hadith</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#D4537E"></span>Fiqh</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#BA7517"></span>Seerat</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#7F77DD"></span>History</div>
+    </div>
+
+    <div id="tt-container"></div>
+  </div>
+
+  <!-- NOTES SECTION -->
+  <div id="notes" class="section">
+    <div class="add-note-form">
+      <p>نئی Note لکھیں</p>
+      <div class="form-row">
+        <input type="text" id="note-title-input" placeholder="Note title..." />
+        <select id="note-subject">
+          <option value="Tafseer">Tafseer</option>
+          <option value="Hadith">Hadith</option>
+          <option value="Fiqh">Fiqh</option>
+          <option value="Seerat">Seerat</option>
+          <option value="History">History</option>
+        </select>
+      </div>
+      <textarea id="note-body-input" placeholder="یہاں note لکھیں..."></textarea>
+      <button class="btn-add" onclick="addNote()">+ Note Save کریں</button>
+    </div>
+    <div id="notes-container"></div>
+  </div>
+
+</div>
+
+<script>
+  const subjectColors = {
+    Tafseer: { dot:'#1D9E75', bg:'#E1F5EE', text:'#085041' },
+    Hadith:  { dot:'#378ADD', bg:'#E6F1FB', text:'#0C447C' },
+    Fiqh:    { dot:'#D4537E', bg:'#FBEAF0', text:'#72243E' },
+    Seerat:  { dot:'#BA7517', bg:'#FAEEDA', text:'#633806' },
+    History: { dot:'#7F77DD', bg:'#EEEDFE', text:'#3C3489' }
+  };
+
+  const timetable = [
+    { day:'پیر — Monday',      subjects:[{name:'Tafseer',time:'8:00 – 9:30'},{name:'Hadith',time:'10:00 – 11:30'}] },
+    { day:'منگل — Tuesday',    subjects:[{name:'Fiqh',time:'8:00 – 9:30'},{name:'Seerat',time:'10:00 – 11:30'}] },
+    { day:'بدھ — Wednesday',   subjects:[{name:'History',time:'8:00 – 9:30'},{name:'Tafseer',time:'10:00 – 11:30'}] },
+    { day:'جمعرات — Thursday', subjects:[{name:'Hadith',time:'8:00 – 9:30'},{name:'Fiqh',time:'10:00 – 11:30'}] },
+    { day:'جمعہ — Friday',     subjects:[{name:'Seerat',time:'8:00 – 9:30'},{name:'History',time:'10:00 – 11:30'}] }
+  ];
+
+  function renderTimetable() {
+    document.getElementById('tt-container').innerHTML = timetable.map(d => `
+      <div class="day-card">
+        <div class="day-title">${d.day}</div>
+        ${d.subjects.map(s => `
+          <div class="subject-row">
+            <span class="subject-dot" style="background:${subjectColors[s.name].dot}"></span>
+            <span class="subject-name">${s.name}</span>
+            <span class="subject-time">${s.time}</span>
+          </div>`).join('')}
+      </div>`).join('');
+  }
+
+  let notes = JSON.parse(localStorage.getItem('student-notes') || '[]');
+
+  function renderNotes() {
+    const c = document.getElementById('notes-container');
+    if (!notes.length) {
+      c.innerHTML = '<div class="empty">ابھی کوئی note نہیں — اوپر سے لکھیں!</div>';
+      return;
+    }
+    c.innerHTML = [...notes].reverse().map((n, ri) => {
+      const i = notes.length - 1 - ri;
+      const col = subjectColors[n.subject];
+      return `<div class="note-card">
+        <div class="note-header">
+          <span class="note-badge" style="background:${col.bg};color:${col.text}">${n.subject}</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="note-date">${n.date}</span>
+            <button class="delete-btn" onclick="deleteNote(${i})" title="Delete">✕</button>
+          </div>
+        </div>
+        <div class="note-title">${n.title}</div>
+        <div class="note-body">${n.body}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function addNote() {
+    const title = document.getElementById('note-title-input').value.trim();
+    const body  = document.getElementById('note-body-input').value.trim();
+    const subject = document.getElementById('note-subject').value;
+    if (!title || !body) { alert('Title اور Note دونوں لکھیں!'); return; }
+    notes.push({ title, body, subject, date: new Date().toLocaleDateString('en-PK') });
+    localStorage.setItem('student-notes', JSON.stringify(notes));
+    document.getElementById('note-title-input').value = '';
+    document.getElementById('note-body-input').value = '';
+    renderNotes();
+  }
+
+  function deleteNote(i) {
+    if (!confirm('یہ note delete کریں؟')) return;
+    notes.splice(i, 1);
+    localStorage.setItem('student-notes', JSON.stringify(notes));
+    renderNotes();
+  }
+
+  function showTab(tab, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  renderTimetable();
+  renderNotes();
+</script>
+
+</body>
+</html>
